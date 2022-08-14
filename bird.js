@@ -100,6 +100,8 @@ class Bird {
         return{ x: x2, y: y2, d: dist };
     }
 
+
+
     think(pipes) {
 
         // Find the closest pipe
@@ -113,38 +115,27 @@ class Bird {
             }
             return 1;
         });
-        let i = this.numOfInputs-2;
+
+        let i = this.numOfInputs-2;//two inputs for y velosity and y pos
         let pp = i / 2;
         let inputs = [];
         let d = 1 / pp;
         let a1 = -1;
-        //i--;
+        //rays
         for (; i--;) {
             let r = this.ray(a1+=d, pipes);
             inputs.push( r.d);
             this.points.push(r);
         }
+
         inputs.push(this.velocity / 10);
         inputs.push(this.y / height);
-      //  let closest = pipes[0];
 
-
-
-/*
-        
-        inputs[0] = this.y / height;
-        inputs[1] = closest.top / height;
-        inputs[2] = closest.bottom / height;
-        inputs[3] = closest.x / width;
-        inputs[4] = this.velocity / 10;
-        inputs[5] = pipes.length > 1 ? pipes[1].top / height : 0;
-        inputs[6] = pipes.length > 1 ? pipes[1].x / width : 0;
-        */
         let output = this.brain.predict(inputs);
         //if (output[0] > output[1] && this.velocity >= 0) {
-        if (output[0] > output[1]) {
+        if (output[0] > 0.5)//output[1]) {
             this.up();
-        }
+        //}
 
     }
 
