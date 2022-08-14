@@ -66,7 +66,8 @@ function draw() {
     }
 
     for (let bird of birds) {
-      if(counter%8==0)bird.think(pipes);
+        //if (counter % 8 == 0)
+            bird.think(pipes);
       bird.update();
     }
 
@@ -81,9 +82,10 @@ function draw() {
   background(0);
 
   for (let bird of birds) {
-    bird.show();
-  }
+      bird.show();
 
+  }
+    birds[0].showview();
   for (let pipe of pipes) {
     pipe.show();
   }

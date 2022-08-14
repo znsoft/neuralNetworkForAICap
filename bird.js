@@ -5,91 +5,159 @@
 // Neuro-Evolution Flappy Bird
 
 class Bird {
-  constructor(brain) {
-    this.y = height / 2;
-    this.x = 64;
+    constructor(brain) {
+        this.y = height / 2;
+        this.x = 64;
 
-    this.gravity = 0.8;
-    this.lift = -12;
-    this.velocity = 0;
+        this.gravity = 0.8;
+        this.lift = -12;
+        this.velocity = 0;
+        this.points = [];
+        this.numOfInputs = 100;
 
+        this.score = 0;
+        this.fitness = 0;
+        if (brain) {
+            this.brain = brain.copy();
+        } else {
+            this.brain = new NeuralNetwork(this.numOfInputs, 10, 2);
+        }
 
-    this.score = 0;
-    this.fitness = 0;
-    if (brain) {
-      this.brain = brain.copy();
-    } else {
-      this.brain = new NeuralNetwork(7, 10, 2);
     }
 
-  }
+    show() {
+        stroke(255);
+        fill(255, 100);
+        ellipse(this.x, this.y, 32, 32);
 
-  show() {
-    stroke(255);
-    fill(255, 100);
-    ellipse(this.x, this.y, 32, 32);
-  }
+        //
 
-  up() {
-    this.velocity += this.lift;
-  }
 
-  mutate() {
-    this.brain.mutate(0.1);
-  }
-
-  think(pipes) {
-
-    // Find the closest pipe
-    let closest = null;
- /*   let closestD = Infinity;
-    for (let i = 0; i < pipes.length; i++) {
-      let d = (pipes[i].x + pipes[i].w) - this.x;
-      if (d < closestD && d > 0) {
-        closest = pipes[i];
-        closestD = d;
-      }
-    }
-*/
-    
-    
-    pipes.sort(( a, b )=> {
-      if(a===undefined||b===undefined)return 0;
-      if ((a.x + a.w) - this.x < (b.x + b.w) - this.x ) {
-        return -1;  
-      }
-        return 1; 
-      });
-//console.log(numbers); // [1, 2, 3, 4, 5]
-    closest = pipes[0];
-    
-    let inputs = [];
-    inputs[0] = this.y / height;
-    inputs[1] = closest.top / height;
-    inputs[2] = closest.bottom / height;
-    inputs[3] = closest.x / width;
-    inputs[4] = this.velocity / 10;
-    inputs[5] = pipes.length>1?pipes[1].top/ height:0;
-    inputs[6] = pipes.length>1?pipes[1].x/ width:0;
-    
-    let output = this.brain.predict(inputs);
-    //if (output[0] > output[1] && this.velocity >= 0) {
-    if (output[0] > output[1]) {
-      this.up();
     }
 
-  }
+    showview() { for (point of this.points) line(this.x, this.y, point.x, point.y);}
 
-  offScreen() {
-    return (this.y > height || this.y < 0);
-  }
+    up() {
+        this.velocity += this.lift;
+    }
 
-  update() {
-    this.score++;
+    mutate() {
+        this.brain.mutate(0.1);
+    }
 
-    this.velocity += this.gravity;
-    //this.velocity *= 0.9;
-    this.y += this.velocity;
-  }
+    ray(ang, pipes) {
+        let s = ang;
+        //let c = Math.cos(ang);
+        let y2 = this.y ;
+        let x2 = width;
+        let pipe = pipes[0];
+        if (pipe !== undefined) 
+        for (pipe of pipes) {
+            let wallDist = pipe.x - this.x;
+            if (wallDist < 0) continue;
+            let ny = wallDist * s;
+            let nx = wallDist * 1;
+
+            y2 = this.y + ny;
+            x2 = this.x + nx;
+            let bottom = height - pipe.bottom;
+
+            if (y2 > pipe.top && y2 < bottom ) {
+                wallDist += pipe.w;
+
+                 ny = wallDist * s;
+                 nx = wallDist * 1;
+
+                y2 = this.y + ny;
+                x2 = this.x + nx;
+
+                if (y2 > pipe.top && y2 < bottom ) { x2 = width; y2 = (width - this.x) * s + this.y; continue; }
+                let wallDisty = 0;
+                if (y2 < pipe.top) wallDisty = pipe.top - this.y ;
+                if (y2 > bottom) wallDisty = bottom - this.y;
+                nx = wallDisty /s;
+
+                ny = wallDisty * 1;
+
+                y2 = this.y + ny;
+                x2 = this.x + nx;
+
+                
+            }
+
+            
+
+            break;
+            }
+
+
+        if (x2 > width) { x2 = width; y2 = (width - this.x) * s + this.y;}
+        if (y2 > height) { x2 = this.x+(height-this.y)/s; y2 = height; }
+        if (y2 < 0) { x2 = this.x - (this.y) / s; y2 = 0; }
+        let dx = x2 - this.x;
+        let dy = y2 - this.y;
+        let dist = (dx * dx + dy * dy) / (width * width + height * height);
+        return{ x: x2, y: y2, d: dist };
+    }
+
+    think(pipes) {
+
+        // Find the closest pipe
+        //let closest = null;
+        this.points = [];
+
+        pipes.sort((a, b) => {
+            if (a === undefined || b === undefined) return 0;
+            if ((a.x + a.w) - this.x < (b.x + b.w) - this.x) {
+                return -1;
+            }
+            return 1;
+        });
+        let i = this.numOfInputs-2;
+        let pp = i / 2;
+        let inputs = [];
+        let d = 1 / pp;
+        let a1 = -1;
+        //i--;
+        for (; i--;) {
+            let r = this.ray(a1+=d, pipes);
+            inputs.push( r.d);
+            this.points.push(r);
+        }
+        inputs.push(this.velocity / 10);
+        inputs.push(this.y / height);
+      //  let closest = pipes[0];
+
+
+
+/*
+        
+        inputs[0] = this.y / height;
+        inputs[1] = closest.top / height;
+        inputs[2] = closest.bottom / height;
+        inputs[3] = closest.x / width;
+        inputs[4] = this.velocity / 10;
+        inputs[5] = pipes.length > 1 ? pipes[1].top / height : 0;
+        inputs[6] = pipes.length > 1 ? pipes[1].x / width : 0;
+        */
+        let output = this.brain.predict(inputs);
+        //if (output[0] > output[1] && this.velocity >= 0) {
+        if (output[0] > output[1]) {
+            this.up();
+        }
+
+    }
+
+    offScreen() {
+        return (this.y > height || this.y < 0);
+    }
+
+    update() {
+        this.score++;
+
+        this.velocity += this.gravity;
+        //this.velocity *= 0.9;
+        this.y += this.velocity;
+    }
 
 }

@@ -12,7 +12,8 @@ class Pipe {
     this.bottom = height - (this.top + this.spacing);
     this.x = width;
     this.w = 80;
-    this.speed = 6+random(2);
+      this.speed = 6 + random(2);
+      this.type = 1;
   }
 
   hits(bird) {
@@ -25,10 +26,10 @@ class Pipe {
   }
 
   show() {
-    fill(255);
-    rectMode(CORNER);
-    rect(this.x, 0, this.w, this.top);
-    rect(this.x, height - this.bottom, this.w, this.bottom);
+    //fill(255);
+    //rectMode(CORNER);
+    //rect(this.x, 0, this.w, this.top);
+    //rect(this.x, height - this.bottom, this.w, this.bottom);
   }
 
   update() {
