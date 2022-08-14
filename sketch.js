@@ -22,11 +22,16 @@ function keyPressed() {
   if (key === 'S') {
     let bird = birds[0];
     saveJSON(bird.brain, 'bird.json');
-  }
+    }
+    if (key === 'L') {
+        //let bird = birds[0];
+        //loadJSON(bird.brain, 'bird.json');
+    }
+
 }
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(1640, 680);
   slider = createSlider(1, 10, 1);
   div = createDiv('this is some text');
   //div.html = gen+" "+score;
@@ -38,7 +43,7 @@ function setup() {
 }
 
 function draw() {
-  div.html(gen+" "+score+" "+birds.length); 
+  div.html("gen:"+gen+" hiscore:"+score+" birds:"+birds.length); 
   for (let n = 0; n < slider.value(); n++) {
     if (counter % 75 == 0) {
       pipes.push(new Pipe());
