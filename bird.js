@@ -14,7 +14,7 @@ class Bird {
         this.velocity = 0;
         this.points = [];
         this.numOfInputs = 100;
-
+        this.viewAngle = 0;
         this.score = 0;
         this.fitness = 0;
         if (brain) {
@@ -30,9 +30,6 @@ class Bird {
         fill(255, 100);
         ellipse(this.x, this.y, 32, 32);
 
-        //
-
-
     }
 
     showview() { for (point of this.points) line(this.x, this.y, point.x, point.y);}
@@ -45,9 +42,10 @@ class Bird {
         this.brain.mutate(0.1);
     }
 
-    ray(ang, pipes) {
-        let s = ang;
-        //let c = Math.cos(ang);
+    ray(s, pipes, ang) {
+        //let s = ang;
+        let cos = Math.cos(ang);
+        let sin = Math.sin(ang);
         let y2 = this.y ;
         let x2 = width;
         let pipe = pipes[0];
@@ -60,6 +58,14 @@ class Bird {
 
             y2 = this.y + ny;
             x2 = this.x + nx;
+            let dy = y2 - pipe.top;
+            if (pipe.type == 1) {
+
+                if (dy * dy < pipe.r * pipe.r) break;
+                x2 = width; y2 = (width - this.x) * s + this.y; continue;
+                
+            }
+
             let bottom = height - pipe.bottom;
 
             if (y2 > pipe.top && y2 < bottom ) {
@@ -123,7 +129,7 @@ class Bird {
         let a1 = -1;
         //rays
         for (; i--;) {
-            let r = this.ray(a1+=d, pipes);
+            let r = this.ray(a1+=d, pipes,0);
             inputs.push( r.d);
             this.points.push(r);
         }
