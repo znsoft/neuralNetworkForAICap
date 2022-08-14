@@ -17,6 +17,8 @@ let pipes = [];
 let counter = 0;
 let slider;
 let div;
+let inp;
+let loadedJson = null;
 
 function keyPressed() {
   if (key === 'S') {
@@ -25,9 +27,16 @@ function keyPressed() {
     }
     if (key === 'L') {
         //let bird = birds[0];
-        //loadJSON(bird.brain, 'bird.json');
+        loadedJson = loadJSON('bird.json', onloadJson);
+        console.log(loadedJson);
     }
 
+}
+
+function onloadJson() {
+    birds[0].brain.deserialize(loadedJson);
+    text('loaded', 10, 670);
+    console.log('loaded bird');
 }
 
 function setup() {
@@ -39,8 +48,19 @@ function setup() {
 //div.position(10, 0);
   for (let i = 0; i < TOTAL; i++) {
     birds[i] = new Bird();
-  }
+    }
+
+    let inp = createInput('');
+    //inp.position(0, 0);
+    //inp.size(65535);
+    inp.input(myInputEvent);
 }
+
+function myInputEvent() {
+    console.log('you are typing: ', this.value());
+    birds[0].brain = NeuralNetwork.deserialize(this.value());
+}
+
 
 function draw() {
   div.html("gen:"+gen+" hiscore:"+score+" birds:"+birds.length); 

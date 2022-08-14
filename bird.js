@@ -142,6 +142,7 @@ class Bird {
         if (output[0] > 0.5)//output[1]) {
             this.up();
         //}
+        
 
     }
 
