@@ -35,6 +35,7 @@ function keyPressed() {
 
 function onloadJson() {
     birds[0].brain.deserialize(loadedJson);
+
     text('loaded', 10, 670);
     console.log('loaded bird');
 }
@@ -59,6 +60,7 @@ function setup() {
 function myInputEvent() {
     console.log('you are typing: ', this.value());
     birds[0].brain = NeuralNetwork.deserialize(this.value());
+    birds.push(new Bird(NeuralNetwork.deserialize(this.value())));
     console.log('loaded: ', birds[0].brain.serialize());
 }
 
