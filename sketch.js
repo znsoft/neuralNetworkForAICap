@@ -59,6 +59,7 @@ function setup() {
 function myInputEvent() {
     console.log('you are typing: ', this.value());
     birds[0].brain = NeuralNetwork.deserialize(this.value());
+    console.log('loaded: ', birds[0].brain.serialize());
 }
 
 

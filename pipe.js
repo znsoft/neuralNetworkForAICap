@@ -38,6 +38,7 @@ class Pipe {
     }
 
     show() {
+        //return;
         //fill(255);
         //rectMode(CORNER);
         if (this.type == 0) {
