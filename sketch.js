@@ -51,6 +51,7 @@ function setup() {
     birds[i] = new Bird();
     }
 
+
     let inp = createInput('');
     //inp.position(0, 0);
     //inp.size(65535);
