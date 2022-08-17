@@ -121,16 +121,84 @@ class Bird {
         return{ x: x2, y: y2, d: dist };
     }
 
+    sdSphere(x, y, xs,ys, r) {
+        let dx = x - xs;
+        let dy = y - ys;
+        let l = Math.sqrt(dx * dx + dy * dy);
+        return l - r;
+    }  
 
+ sdBox(x, y, box1x, box1y, w, h) {
+        let ax = Math.abs(x - box1x);
+        let ay = Math.abs(y - box1y);
+        let dx = ax-w;
+        let dy = ay - h;
+        let l = Math.sqrt(dx * dx + dy * dy);
+        return Math.min(Math.max(dx, dy), 0) + l;
+    }
+
+ mapObj( x,y , pipes)
+{
+     let res = Math.min(x, y);
+     res = Math.min(res, height - y);
+     res = Math.min(res, width - x);
+     for (let pipe of pipes) {
+         if (pipe.type == 0) {
+             let box1x = pipe.x + pipe.w / 2;
+             let box1y = pipe.top / 2;
+             res = Math.min(this.sdBox(x, y, box1x, box1y, pipe.w, pipe.top), res);
+             let box2x = pipe.x + pipe.w / 2;
+             let box2y = height - (pipe.bottom / 2);
+             res = Math.min(this.sdBox(x, y, box2x, box2y, pipe.w, pipe.bottom), res);
+         }
+         if (pipe.type == 1) {
+             res = Math.min(this.sdSphere(x, y, pipe.x, pipe.top, pipe.r), res);
+         }
+     }
+     return res;
+
+}
+
+
+castRay( xd,yd,pipes )
+{
+    let tmin = 1.0;
+    let tmax = width;
+
+
+
+    let t = tmin;
+    for (let i = 0; i < 60; i++ )
+    {
+        let precis = 0.005 * t;
+        let res = this.mapObj(this.x + xd * t,this.y+yd*t,pipes);
+        if (res < precis || t > tmax) break;
+        t += res;
+    }
+
+    if (t > tmax) t = -1.0;
+    return t;
+}
+
+
+    raypath(pipes, ang) {
+        //let s = ang;
+        let cos = Math.cos(ang);
+        let sin = Math.sin(ang);
+        let res = this.castRay(cos, sin, pipes);
+
+        return { x: this.x+cos*res, y: this.y+sin*res, d: res };
+    }
 
     think(pipes) {
 
         // Find the closest pipe
         //let closest = null;
         this.points = [];
-
+        //let xs = this.x
         pipes.sort((a, b) => {
             if (a === undefined || b === undefined) return 0;
+            //let x = a.x-this.x;
             if ((a.x + a.w) - this.x < (b.x + b.w) - this.x) {
                 return -1;
             }
@@ -144,7 +212,8 @@ class Bird {
         let a1 = -1;
         //rays
         for (; i--;) {
-            let r = this.ray(a1+=d, pipes,0);
+            let r = this.raypath(pipes, a1 += d)
+            //let r = this.ray(a1+=d, pipes,0);
             inputs.push( r.d);
             this.points.push(r);
         }
