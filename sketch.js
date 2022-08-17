@@ -21,9 +21,9 @@ let inp;
 let loadedJson = null;
 
 function keyPressed() {
-  if (key === 'S') {
-    let bird = birds[0];
-    saveJSON(bird.brain, 'bird.json');
+    if (key === 'S') {
+        let bird = birds[0];
+        saveJSON(bird.brain, 'bird.json');
     }
     if (key === 'L') {
         //let bird = birds[0];
@@ -41,13 +41,13 @@ function onloadJson() {
 }
 
 function setup() {
-  createCanvas(1640, 680);
-  slider = createSlider(1, 10, 1);
-  div = createDiv('this is some text');
-  //div.html = gen+" "+score;
-  div.style('font-size', '16px');
-//div.position(10, 0);
-    for (let i = 0; i < 3; i++) {
+    createCanvas(1640, 680);
+    slider = createSlider(1, 10, 1);
+    div = createDiv('this is some text');
+    //div.html = gen+" "+score;
+    div.style('font-size', '16px');
+    //div.position(10, 0);
+    for (let i = 0; i < TOTAL; i++) {
         let b = new Bird(NeuralNetwork.deserialize(defbird));
         b.x += 10*Math.sin(random(6));
         b.y += 30*Math.sin(random(6));
@@ -71,57 +71,59 @@ function myInputEvent() {
 
 
 function draw() {
-  div.html("gen:"+gen+" hiscore:"+score+" birds:"+birds.length); 
-  for (let n = 0; n < slider.value(); n++) {
-    if (counter % 75 == 0) {
-      pipes.push(new Pipe());
-    }
-    counter++;
+    div.html("gen:" + gen + " hiscore:" + score + " birds:" + birds.length);
 
-    for (let i = pipes.length - 1; i >= 0; i--) {
-      pipes[i].update();
 
-      for (let j = birds.length - 1; j >= 0; j--) {
-        if (pipes[i].hits(birds[j])) {
-          savedBirds.push(birds.splice(j, 1)[0]);
+    for (let n = 0; n < slider.value(); n++) {
+        if (counter % 75 == 0) {
+            pipes.push(new Pipe());
         }
-      }
+        counter++;
 
-      if (pipes[i].offscreen()) {
-        pipes.splice(i, 1);
-      }
+        for (let i = pipes.length - 1; i >= 0; i--) {
+            pipes[i].update();
+
+            for (let j = birds.length - 1; j >= 0; j--) {
+                if (pipes[i].hits(birds[j])) {
+                    savedBirds.push(birds.splice(j, 1)[0]);
+                }
+            }
+
+            if (pipes[i].offscreen()) {
+                pipes.splice(i, 1);
+            }
+        }
+
+        for (let i = birds.length - 1; i >= 0; i--) {
+            if (birds[i].offScreen()) {
+                savedBirds.push(birds.splice(i, 1)[0]);
+            }
+        }
+
+        for (let bird of birds) {
+            //if (counter % 8 == 0)
+            bird.think(pipes);
+            bird.update();
+        }
+
+        if (birds.length === 0) {
+            counter = 0;
+            nextGeneration();
+            pipes = [];
+        }
     }
 
-    for (let i = birds.length - 1; i >= 0; i--) {
-      if (birds[i].offScreen()) {
-        savedBirds.push(birds.splice(i, 1)[0]);
-      }
-    }
+    // All the drawing stuff
+    background(0);
 
     for (let bird of birds) {
-        //if (counter % 8 == 0)
-            bird.think(pipes);
-      bird.update();
+        bird.show();
+
     }
-
-    if (birds.length === 0) {
-      counter = 0;
-      nextGeneration();
-      pipes = [];
-    }
-  }
-
-  // All the drawing stuff
-  background(0);
-
-  for (let bird of birds) {
-      bird.show();
-
-  }
     birds[0].showview();
-  for (let pipe of pipes) {
-    pipe.show();
-  }
+    for (let pipe of pipes) {
+        pipe.show();
+    }
 }
 
 // function keyPressed() {
