@@ -47,8 +47,12 @@ function setup() {
   //div.html = gen+" "+score;
   div.style('font-size', '16px');
 //div.position(10, 0);
-  for (let i = 0; i < TOTAL; i++) {
-    birds[i] = new Bird();
+    for (let i = 0; i < 3; i++) {
+        let b = new Bird(NeuralNetwork.deserialize(defbird));
+        b.x += 10*Math.sin(random(6));
+        b.y += 30*Math.sin(random(6));
+
+        birds[i] = b;
     }
 
 
