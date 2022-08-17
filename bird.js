@@ -124,7 +124,7 @@ class Bird {
         let pp = i / 2;
         let inputs = [];
         let oneDeg = 3.14 / 180;
-        let a1 = oneDeg*60/2;
+        let a1 = oneDeg*70/2;
         let d = a1 / pp;
 
         //rays
