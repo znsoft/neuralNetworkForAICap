@@ -48,13 +48,12 @@ function setup() {
     div.style('font-size', '16px');
     //div.position(10, 0);
     for (let i = 0; i < TOTAL; i++) {
-        let b = new Bird(NeuralNetwork.deserialize(defbird));
-        b.x += 10*Math.sin(random(6));
-        b.y += 30*Math.sin(random(6));
+        let b = new Bird();
+
 
         birds[i] = b;
     }
-
+    birds.push(new Bird(NeuralNetwork.deserialize(defbird)));
 
     let inp = createInput('');
     //inp.position(0, 0);
