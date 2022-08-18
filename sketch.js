@@ -106,7 +106,7 @@ function draw() {
         }
 
         if (birds.length < 2) {
-            savedBirds.push(birds[0]);
+            if (birds[0] !== undefined) savedBirds.push(birds[0]);
             counter = 0;
             nextGeneration();
             pipes = [];
