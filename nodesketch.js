@@ -10,6 +10,13 @@
 // Part 4: https://youtu.be/HrvNpbnjEG8
 // Part 5: https://youtu.be/U9wiMM3BqLU
 
+const MATRIX = require('./neuralnetwork/matrix.js')
+const NN = require('./neuralnetwork/nn.js')
+const PIPE = require('./pipe.js')
+const DEFBIRD = require('./defbird.js')
+const Bird = require('./bird.js')
+const GA = require('./ga.js')
+
 const TOTAL = 500;
 let birds = [];
 let savedBirds = [];
@@ -19,61 +26,21 @@ let slider;
 let div;
 let inp;
 let loadedJson = null;
-
-function keyPressed() {
-    if (key === 'S') {
-        let bird = birds[0];
-        saveJSON(bird.brain, 'bird.json');
-    }
-    if (key === 'L') {
-        //let bird = birds[0];
-        loadedJson = loadJSON('bird.json', onloadJson);
-        console.log(loadedJson);
-    }
-
-}
-
-function onloadJson() {
-    birds[0].brain.deserialize(loadedJson);
-
-    text('loaded', 10, 670);
-    console.log('loaded bird');
-}
+const width = 1640;
+const height = 680; 
 
 function setup() {
-    createCanvas(1640, 680);
-    slider = createSlider(1, 10, 1);
-    div = createDiv('this is some text');
-    //div.html = gen+" "+score;
-    div.style('font-size', '16px');
-    //div.position(10, 0);
     for (let i = 0; i < TOTAL; i++) {
         let b = new Bird();
-
-
         birds[i] = b;
     }
     birds.push(new Bird(NeuralNetwork.deserialize(defbird)));
 
-    let inp = createInput('');
-    //inp.position(0, 0);
-    //inp.size(65535);
-    inp.input(myInputEvent);
 }
 
-function myInputEvent() {
-    console.log('you are typing: ', this.value());
-    birds[0].brain = NeuralNetwork.deserialize(this.value());
-    birds.push(new Bird(NeuralNetwork.deserialize(this.value())));
-    console.log('loaded: ', birds[0].brain.serialize());
-}
 
 
 function draw() {
-    div.html("gen:" + gen + " hiscore:" + score + " birds:" + birds.length);
-
-
-    for (let n = 0; n < slider.value(); n++) {
         if (counter % 75 == 0) {
             pipes.push(new Pipe());
         }
@@ -106,29 +73,14 @@ function draw() {
         }
 
         if (birds.length < 2) {
-            savedBirds.push(birds[0]);
+		savedBirds.push(birds[0]);
             counter = 0;
             nextGeneration();
             pipes = [];
         }
-    }
 
-    // All the drawing stuff
-    background(0);
-
-    for (let bird of birds) {
-        bird.show();
-
-    }
-    birds[0].showview();
-    for (let pipe of pipes) {
-        pipe.show();
-    }
 }
 
-// function keyPressed() {
-//   if (key == ' ') {
-//     bird.up();
-//     //console.log("SPACE");
-//   }
-// }
+
+setup();
+

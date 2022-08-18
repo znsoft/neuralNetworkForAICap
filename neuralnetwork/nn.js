@@ -179,3 +179,4 @@ class NeuralNetwork {
 
 
 }
+module.exports = NeuralNetwork

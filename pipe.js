@@ -63,3 +63,4 @@ class Pipe {
         }
     }
 }
+module.exports = Pipe
