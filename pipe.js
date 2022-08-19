@@ -4,6 +4,13 @@
 
 // Neuro-Evolution Flappy Bird
 
+if (typeof global !== 'undefined') {
+    var height = global.height;
+    var random = Math.random;
+    var width = global.width;
+}
+
+
 class Pipe {
 
     constructor() {
@@ -11,7 +18,7 @@ class Pipe {
         this.top = random(1, 7 / 8 * height);
         this.bottom = height - (this.top + this.spacing);
         this.x = width;
-        this.r = 26 + random(50);
+        this.r = 17 + random(157);
         this.w = 70 + random(50);
         this.speed = 6 + random(3);
         this.type = (random(10)>5)?0:1;
@@ -39,14 +46,16 @@ class Pipe {
 
     show() {
         //return;
-        //fill(255);
+        
         //rectMode(CORNER);
         if (this.type == 0) {
+            fill(100, 12, 15);
             rect(this.x, 0, this.w, this.top);
             rect(this.x, height - this.bottom, this.w, this.bottom);
         }
 
         if (this.type == 1) {
+            fill(80, 12, 15);
             ellipse(this.x, this.top, this.r*2, this.r*2);
         }
     }
@@ -63,4 +72,6 @@ class Pipe {
         }
     }
 }
-module.exports = Pipe
+if (typeof module !== 'undefined') {
+    module.exports = Pipe;
+}

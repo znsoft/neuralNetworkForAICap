@@ -1,6 +1,3 @@
-// let m = new Matrix(3,2);
-
-
 class Matrix {
   constructor(rows, cols) {
     this.rows = rows;
@@ -16,7 +13,14 @@ class Matrix {
       }
     }
     return m;
-  }
+    }
+
+    getHash() {
+        let res = 0;
+        let a = this.toArray();
+        for (let e of a) res += Math.abs(e);
+        return res;
+    }
 
   static fromArray(arr) {
     return new Matrix(arr.length, 1).map((e, i) => arr[i]);

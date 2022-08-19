@@ -3,9 +3,16 @@
 // http://patreon.com/codingtrain
 
 // Neuro-Evolution Flappy Bird
+if (typeof global !== 'undefined') {
+    var height = global.height;
+   // var NeuralNetwork = require('./neuralnetwork/nn.js')
+    var random = Math.random;
+    var width = global.width;
+}
 
 class Bird {
     constructor(brain) {
+        
         this.y = height / 2;
         this.x = 64;
         //this.fov = 60;
@@ -22,13 +29,18 @@ class Bird {
         } else {
             this.brain = new NeuralNetwork(this.numOfInputs, 50, 3);
         }
-
+        this.name = this.brain.toString();
     }
 
-    show() {
+    show(prefix) {
         stroke(255);
         fill(255, 100);
         ellipse(this.x, this.y, 32, 32);
+//        textSize(32);
+        fill(0, 102, 153);
+        let p = prefix === undefined ? "" : prefix+":";
+        text(p + this.name, this.x - 15, this.y - 10, 32, 32); // Text wraps within text box
+        //this.viewAngle
 
     }
 

@@ -115,9 +115,10 @@ function draw() {
 
     // All the drawing stuff
     background(0);
-
+    let i = 0;
     for (let bird of birds) {
-        bird.show();
+
+        bird.show(String(i++));
 
     }
     birds[0].showview();
