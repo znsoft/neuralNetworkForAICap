@@ -11,9 +11,9 @@
 // Part 5: https://youtu.be/U9wiMM3BqLU
 
 const MATRIX = require('./neuralnetwork/matrix.js')
-const NN = require('./neuralnetwork/nn.js')
-const PIPE = require('./pipe.js')
-const DEFBIRD = require('./defbird.js')
+var NeuralNetwork = require('./neuralnetwork/nn.js')
+const Pipe = require('./pipe.js')
+var defbird = require('./defbird.js')
 const Bird = require('./bird.js')
 const GA = require('./ga.js')
 
@@ -26,15 +26,16 @@ let slider;
 let div;
 let inp;
 let loadedJson = null;
-const width = 1640;
-const height = 680; 
 
 function setup() {
+    global.width = 1640;
+    global.height = 680; 
+
     for (let i = 0; i < TOTAL; i++) {
         let b = new Bird();
         birds[i] = b;
     }
-    birds.push(new Bird(NeuralNetwork.deserialize(defbird)));
+    //birds.push(new Bird(NeuralNetwork.deserialize(defbird)));
 
 }
 
@@ -43,6 +44,7 @@ function setup() {
 function draw() {
         if (counter % 75 == 0) {
             pipes.push(new Pipe());
+            console.log(counter);
         }
         counter++;
 
@@ -73,7 +75,7 @@ function draw() {
         }
 
         if (birds.length < 2) {
-		savedBirds.push(birds[0]);
+            if (birds[0] !== undefined) savedBirds.push(birds[0]);
             counter = 0;
             nextGeneration();
             pipes = [];
@@ -83,4 +85,8 @@ function draw() {
 
 
 setup();
+while(true)draw();
+process.argv.forEach(function (val, index, array) {
+    console.log(index + ': ' + val);
+});
 

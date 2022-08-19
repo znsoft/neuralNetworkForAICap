@@ -5,7 +5,8 @@
 // Neuro-Evolution Flappy Bird
 if (typeof global !== 'undefined') {
     var height = global.height;
-   // var NeuralNetwork = require('./neuralnetwork/nn.js')
+   // if (NeuralNetwork === undefined)
+    NeuralNetwork = require('./neuralnetwork/nn.js')
     var random = Math.random;
     var width = global.width;
 }

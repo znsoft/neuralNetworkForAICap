@@ -1,6 +1,6 @@
 // Other techniques for learning
 if (typeof global !== 'undefined') {
-  //  var Matrix = require('./matrix.js')
+    Matrix = require('./matrix.js')
 }
 
 class ActivationFunction {

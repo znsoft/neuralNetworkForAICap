@@ -19,7 +19,7 @@ class Pipe {
         this.bottom = height - (this.top + this.spacing);
         this.x = width;
         this.r = 17 + random(157);
-        this.w = 70 + random(50);
+        this.w = 50 + random(80);
         this.speed = 6 + random(3);
         this.type = (random(10)>5)?0:1;
     }

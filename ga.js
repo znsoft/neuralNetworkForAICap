@@ -3,6 +3,8 @@
 // http://patreon.com/codingtrain
 
 // Neuro-Evolution Flappy Bird
+
+
 let gen = 0;
 let score = 0;
 
