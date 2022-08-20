@@ -47,14 +47,17 @@ function setup() {
     //div.html = gen+" "+score;
     div.style('font-size', '16px');
     //div.position(10, 0);
+    //let startbrain = NeuralNetwork.deserialize(defbird);
+    //gen = startbrain.generation;
     for (let i = 0; i < TOTAL; i++) {
         let b = new Bird();
 
 
         birds[i] = b;
     }
-    birds.push(new Bird(NeuralNetwork.deserialize(defbird)));
-
+    //let b = new Bird();
+    //birds.push(b);
+    
     let inp = createInput('');
     //inp.position(0, 0);
     //inp.size(65535);
@@ -68,14 +71,16 @@ function myInputEvent() {
     console.log('loaded: ', birds[0].brain.serialize());
 }
 
-
+let ish = true;
 function draw() {
     div.html("gen:" + gen + " hiscore:" + score + " birds:" + birds.length);
 
 
     for (let n = 0; n < slider.value(); n++) {
         if (counter % 75 == 0) {
+            //pipes.push(new Pipe(ish ? 1 : height - 100));
             pipes.push(new Pipe());
+            ish = !ish;
         }
         counter++;
 

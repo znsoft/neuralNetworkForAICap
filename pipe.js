@@ -13,14 +13,14 @@ if (typeof global !== 'undefined') {
 
 class Pipe {
 
-    constructor() {
+    constructor(y,speed) {
         this.spacing = 100 + random(50);
-        this.top = random(1, 7 / 8 * height);
+        this.top = (y===undefined)?random(1, 7 / 8 * height):y;
         this.bottom = height - (this.top + this.spacing);
         this.x = width;
         this.r = 17 + random(157);
-        this.w = 50 + random(80);
-        this.speed = 6 + random(3);
+        this.w = 20 + random(120);
+        this.speed = (speed===undefined)?6 + random(3):speed;
         this.type = (random(10)>5)?0:1;
     }
 
