@@ -42,15 +42,15 @@ function onloadJson() {
 
 function setup() {
     createCanvas(1640, 680);
-    slider = createSlider(1, 10, 1);
+    slider = createSlider(1, 20, 1);
     div = createDiv('this is some text');
     //div.html = gen+" "+score;
     div.style('font-size', '16px');
     //div.position(10, 0);
-    //let startbrain = NeuralNetwork.deserialize(defbird);
-    //gen = startbrain.generation;
-    for (let i = 0; i < TOTAL; i++) {
-        let b = new Bird();
+    let startbrain = NeuralNetwork.deserialize(defbird);
+    gen = startbrain.generation;
+    for (let i = 0; i < TOTAL-400; i++) {
+        let b = new Bird(startbrain);
 
 
         birds[i] = b;
@@ -78,8 +78,8 @@ function draw() {
 
     for (let n = 0; n < slider.value(); n++) {
         if (counter % 75 == 0) {
-            //pipes.push(new Pipe(ish ? 1 : height - 100));
-            pipes.push(new Pipe());
+            pipes.push(new Pipe(ish ? 1 : 7 / 8 * height));
+            //pipes.push(new Pipe());
             ish = !ish;
         }
         counter++;
@@ -110,8 +110,8 @@ function draw() {
             bird.update();
         }
 
-        if (birds.length < 2) {
-            if (birds[0] !== undefined) savedBirds.push(birds[0]);
+        if (birds.length < 1) {
+            //if (birds[0] !== undefined) savedBirds.push(birds[0]);
             counter = 0;
             nextGeneration();
             pipes = [];
